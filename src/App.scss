@@ -15,5 +15,65 @@ code {
 
 .app-container {
 
-  
+    .login-container {
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+
+      .title {
+        text-align: center;
+        font-size: 25px;
+        font-weight: 500;
+        padding-top: 30px;
+      }
+
+      .text {
+        font-weight: 500;
+        padding-bottom: 5px;
+      }
+
+      input {
+        padding: 12px 17px;
+        outline: none;
+        width: 100%;
+        margin-bottom: 7px;
+        background: #1618230f;
+        border: #1618230f;
+        border-radius: 3px;
+
+        &:hover {
+          background-color: #dedede;
+
+        }
+      }
+      .input-password {
+        position: relative;
+
+        i {
+          cursor: pointer;
+          position: absolute;
+          top: 17px;
+          right: 10px;
+        }
+      }
+    }
+
+
+    button {
+      padding: 10px;
+      border-radius: 5px;
+      outline: none;
+      border: none;
+      // margin-top: 10px !important;
+      
+      &.active {
+        background-color: #fe2c55;
+        color: white;
+      }
+    }
+    .back {
+      text-align: center;
+      margin-top: 20px;
+      cursor: pointer;
+    }
 }
