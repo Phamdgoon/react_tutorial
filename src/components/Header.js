@@ -6,17 +6,28 @@ import logoApp from "../assets/images/logo192.png";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../context/UserContext";
+import { useSelector, useDispatch } from "react-redux";
+import { handleLogoutRedux } from "../redux/actions/userAction";
 
 const Header = (props) => {
-    const { logout, user } = useContext(UserContext);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
+    const user = useSelector((state) => state.user.account);
     const handleLogout = () => {
-        logout();
-        navigate("/");
-        toast.success("logout success");
+        dispatch(handleLogoutRedux());
     };
+
+    useEffect(() => {
+        if (
+            user &&
+            user.auth === false &&
+            window.location.pathname !== "/login"
+        ) {
+            navigate("/");
+            toast.success("logout success");
+        }
+    }, [user]);
     return (
         <Navbar bg="light" expand="lg" className="bg-body-tertiary">
             <Container>

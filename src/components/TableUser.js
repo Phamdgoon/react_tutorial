@@ -200,7 +200,7 @@ const TableUsers = (props) => {
                     </button>
                 </div>
             </div>
-            <div className="col-4 my-3">
+            <div className="col-12 col-sm-4 my-3">
                 <input
                     className="form-control"
                     placeholder="Search user by email..."

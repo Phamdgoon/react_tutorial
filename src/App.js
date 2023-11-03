@@ -1,24 +1,20 @@
 import { Button } from "react-bootstrap";
 import "./App.scss";
 import Header from "./components/Header";
-import TableUsers from "./components/TableUser";
 import Container from "react-bootstrap/Container";
-import { Routes, Route, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import Home from "./components/Home";
-import Login from "./components/Login";
+
+import AppRoutes from "./routes/AppRoutes";
 import { useContext, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { UserContext } from "./context/UserContext";
+import { handleRefresh } from "./redux/actions/userAction";
 
 function App() {
-    const { user, loginContext } = useContext(UserContext);
-
+    const dispatch = useDispatch();
     useEffect(() => {
         if (localStorage.getItem("token")) {
-            loginContext(
-                localStorage.getItem("email"),
-                localStorage.getItem("token")
-            );
+            dispatch(handleRefresh());
         }
     }, []);
     return (
@@ -26,11 +22,7 @@ function App() {
             <div className="app-container">
                 <Header />
                 <Container>
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/users" element={<TableUsers />} />
-                        <Route path="/login" element={<Login />} />
-                    </Routes>
+                    <AppRoutes />
                 </Container>
             </div>
             <ToastContainer

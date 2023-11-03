@@ -1,37 +1,40 @@
 import { useEffect, useState } from "react";
-import { loginApi } from "../service/UserService";
+
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { UserContext } from "../context/UserContext";
+
+import { handleLoginRedux } from "../redux/actions/userAction";
+import { useDispatch, useSelector } from "react-redux";
 const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isShowPassword, setIsShowPassword] = useState(false);
-    const [loadingApi, setLoadingApi] = useState(false);
-    const { loginContext } = useContext(UserContext);
+    const dispatch = useDispatch();
+    const isLoading = useSelector((state) => state.user.isLoading);
+    const account = useSelector((state) => state.user.account);
 
     const handleLogin = async () => {
         if (!email || !password) {
             toast.error("Missing email/password");
             return;
         }
-        setLoadingApi(true);
-        let res = await loginApi(email, password);
-        if (res && res.token) {
-            loginContext(email, res.token);
-            navigate("/");
-        } else {
-            if (res && res.status === 400) {
-                toast.error(res.data.error);
-            }
-        }
-        setLoadingApi(false);
+
+        dispatch(handleLoginRedux(email, password));
     };
     const handleGoBack = () => {
         navigate("/");
     };
+    const handlePressEnter = (event) => {
+        if (event && event.key === "Enter") {
+            handleLogin();
+        }
+    };
+    useEffect(() => {
+        if (account && account.auth === true) {
+            navigate("/");
+        }
+    }, [account]);
     return (
         <>
             <div className="login-container col-12 col-sm-4">
@@ -49,6 +52,7 @@ const Login = () => {
                         placeholder="Password"
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
+                        onKeyDown={(event) => handlePressEnter(event)}
                     />
                     <i
                         className={
@@ -64,7 +68,7 @@ const Login = () => {
                     disabled={email && password ? false : "true"}
                     onClick={() => handleLogin()}
                 >
-                    {loadingApi && <i className="fa-solid fa-sync fa-spin"></i>}
+                    {isLoading && <i className="fa-solid fa-sync fa-spin"></i>}
                     &nbsp;Login
                 </button>
                 <div className="back">
